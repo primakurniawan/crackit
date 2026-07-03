@@ -164,8 +164,8 @@ export default function GameBoardPage() {
     <div className={`theme-${config.category}`} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap)' }}>
 
       {/* Top Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <button onClick={() => {
+      <div className="top-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <button className="menu-btn" onClick={() => {
           if (confirm('End this game and go back to setup?')) {
             sessionStorage.removeItem(STORAGE_KEY);
             router.push('/game');
@@ -217,10 +217,10 @@ export default function GameBoardPage() {
         </div>
 
         {/* Card + Timer Row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+        <div className="card-timer-row" style={{ display: 'flex', alignItems: 'center', gap: 32, width: '100%' }}>
 
           {/* 3D Card */}
-          <div className="card-scene" onClick={handleFlip} style={{ cursor: isFlipped ? 'default' : 'pointer' }}>
+          <div className="card-scene" onClick={handleFlip} style={{ cursor: isFlipped ? 'default' : 'pointer', flexShrink: 0 }}>
             <div className={`card-inner ${isFlipped ? 'flipped' : ''}`}>
 
               {/* Front */}
@@ -328,6 +328,13 @@ export default function GameBoardPage() {
           Card {currentIndex + 1} of {cards.length}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .top-bar { flex-direction: column; align-items: stretch !important; }
+          .menu-btn { align-self: flex-start; }
+          .card-timer-row { flex-direction: column; gap: 20px !important; }
+        }
+      `}</style>
     </div>
   );
 }

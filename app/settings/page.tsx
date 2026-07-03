@@ -50,8 +50,8 @@ export default function SettingsPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap)' }}>
 
         {/* Sound Settings */}
-        <div className="tile" style={{ padding: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+        <div className="tile" style={{ padding: '24px' }}>
+          <div className="settings-header" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
             <div style={{
               width: 48, height: 48, borderRadius: 16,
               background: 'rgba(6,182,212,0.12)', color: '#06b6d4',
@@ -97,8 +97,8 @@ export default function SettingsPage() {
         </div>
 
         {/* Timer Settings */}
-        <div className="tile" style={{ padding: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+        <div className="tile" style={{ padding: '24px' }}>
+          <div className="settings-header" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
             <div style={{
               width: 48, height: 48, borderRadius: 16,
               background: 'rgba(245,158,11,0.12)', color: '#f59e0b',
@@ -178,6 +178,12 @@ export default function SettingsPage() {
           {saved ? '✓ Saved!' : <><Save size={18} /> Save Settings</>}
         </button>
       </div>
+      <style>{`
+        @media (max-width: 480px) {
+          .settings-header { flex-direction: column; text-align: center; }
+          .tile { padding: 20px !important; }
+        }
+      `}</style>
     </div>
   );
 }

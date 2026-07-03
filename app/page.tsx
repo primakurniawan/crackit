@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Sparkles, Heart, Users, Home, Briefcase, ArrowRight, Zap, Clock } from 'lucide-react';
+import { Heart, Users, Home, Briefcase, ArrowRight, Zap, Clock } from 'lucide-react';
 import { CATEGORIES } from '@/lib/seed-questions';
 
 // Stat cards data
@@ -31,17 +31,18 @@ export default function HomePage() {
     <div className="fade-up" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap)' }}>
 
       {/* ── Hero Bento Row ───────────────────────────────────────────────── */}
-      <div className="bento bento-6" style={{ gridAutoRows: 180 }}>
+      <div className="bento bento-6" style={{ gridAutoRows: 'minmax(140px, auto)' }}>
 
         {/* Play Now — biggest tile */}
-        <Link href="/game" className="tile tile-accent tile-interactive col-span-4 row-span-2" style={{
+        <Link href="/game" className="tile tile-accent tile-interactive col-span-4 row-span-2 hero-tile" style={{
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           gap: 16, textDecoration: 'none', color: 'white',
+          padding: '40px 20px',
         }}>
-          <div style={{ fontSize: 64 }}>🃏</div>
+          <div className="hero-emoji" style={{ fontSize: 64 }}>🃏</div>
           <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, marginBottom: 6 }}>
+            <h1 className="hero-title" style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, marginBottom: 6 }}>
               Play CrackIt
             </h1>
             <p style={{ margin: 0, fontSize: 16, opacity: 0.8, fontWeight: 500 }}>
@@ -103,7 +104,7 @@ export default function HomePage() {
         {CATEGORIES.filter(c => c.id !== 'custom').map((cat) => {
           const accent = CATEGORY_ACCENTS[cat.id];
           return (
-            <Link key={cat.id} href={`/game?category=${cat.id}`} className="tile tile-interactive" style={{
+            <Link key={cat.id} href={`/game?category=${cat.id}`} className="tile tile-interactive cat-tile" style={{
               padding: '24px 28px', display: 'flex', alignItems: 'center',
               gap: 20, textDecoration: 'none', color: 'var(--text-primary)',
             }}>
@@ -138,7 +139,7 @@ export default function HomePage() {
       </div>
 
       {/* ── Timer Feature Callout ─────────────────────────────────────────── */}
-      <div className="tile" style={{
+      <div className="tile callout-tile" style={{
         padding: '28px 32px',
         display: 'flex', alignItems: 'center', gap: 24,
         background: 'rgba(6,182,212,0.06)', borderColor: 'rgba(6,182,212,0.2)',
@@ -158,6 +159,16 @@ export default function HomePage() {
           </p>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hero-tile { padding: 40px 20px !important; }
+          .hero-emoji { font-size: 48px !important; }
+          .hero-title { font-size: 28px !important; }
+          .cat-tile { padding: 20px !important; gap: 16px !important; }
+          .callout-tile { flex-direction: column; text-align: center; padding: 24px !important; }
+        }
+      `}</style>
 
     </div>
   );
