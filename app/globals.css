@@ -1,0 +1,210 @@
+/* ─── Bento Design System ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Base palette */
+  --bg-base:       #0c0e13;
+  --bg-surface:    #13161e;
+  --bg-elevated:   #1a1d27;
+  --bg-hover:      #1f2333;
+
+  /* Border */
+  --border:        rgba(255,255,255,0.06);
+  --border-hover:  rgba(255,255,255,0.12);
+
+  /* Text */
+  --text-primary:  rgba(255,255,255,0.95);
+  --text-secondary:rgba(255,255,255,0.55);
+  --text-muted:    rgba(255,255,255,0.3);
+
+  /* Bento geometry */
+  --radius-sm:  16px;
+  --radius-md:  24px;
+  --radius-lg:  32px;
+  --radius-xl:  40px;
+  --gap:        14px;
+
+  /* Accent — overridden by category themes */
+  --accent:     #06b6d4;
+  --accent-dim: rgba(6,182,212,0.15);
+
+  /* Fonts */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* Category accent overrides */
+.theme-relationship { --accent:#f43f5e; --accent-dim:rgba(244,63,94,0.12); }
+.theme-friends       { --accent:#a855f7; --accent-dim:rgba(168,85,247,0.12); }
+.theme-family        { --accent:#f59e0b; --accent-dim:rgba(245,158,11,0.12); }
+.theme-seminar       { --accent:#10b981; --accent-dim:rgba(16,185,129,0.12); }
+.theme-custom        { --accent:#0ea5e9; --accent-dim:rgba(14,165,233,0.12); }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--font-body);
+  color:  var(--text-primary);
+  background: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { margin: 0; min-height: 100svh; }
+
+/* ─── Bento Grid ───────────────────────────────────────────────────────────── */
+.bento {
+  display: grid;
+  gap: var(--gap);
+}
+.bento-2  { grid-template-columns: repeat(2, 1fr); }
+.bento-3  { grid-template-columns: repeat(3, 1fr); }
+.bento-4  { grid-template-columns: repeat(4, 1fr); }
+.bento-6  { grid-template-columns: repeat(6, 1fr); }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+.row-span-2 { grid-row: span 2; }
+
+.tile {
+  background:    var(--bg-elevated);
+  border:        1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow:      hidden;
+  transition:    transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tile-interactive {
+  cursor: pointer;
+}
+.tile-interactive:hover {
+  transform:    translateY(-3px);
+  border-color: var(--border-hover);
+  box-shadow:   0 12px 32px rgba(0,0,0,0.3);
+}
+.tile-interactive:active {
+  transform: translateY(0);
+}
+
+.tile-accent {
+  background: var(--accent);
+  border-color: transparent;
+}
+.tile-accent:hover {
+  filter: brightness(1.1);
+}
+
+.tile-dim {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+/* ─── Cards (3D Flip) ──────────────────────────────────────────────────────── */
+.card-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 340px;
+  height: 480px;
+  margin: 0 auto;
+}
+.card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.34, 1.35, 0.64, 1);
+  cursor: pointer;
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  overflow: hidden;
+}
+.card-front {
+  background: var(--bg-elevated);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.card-front::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border-radius: 26px;
+  border: 1px dashed rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+.card-back {
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 20px 60px rgba(0,0,0,0.5);
+  transform: rotateY(180deg);
+}
+
+/* ─── Timer Ring ───────────────────────────────────────────────────────────── */
+.timer-ring { transform: rotate(-90deg); }
+.timer-track { fill: none; stroke: rgba(255,255,255,0.06); }
+.timer-fill  {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 1s ease;
+}
+
+/* ─── Typography ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; margin: 0; }
+
+/* ─── Utilities ────────────────────────────────────────────────────────────── */
+.fade-up { animation: fadeUp 0.35s ease-out both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.celebrate { animation: celebrate 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes celebrate {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05) translateY(-8px); }
+  100% { transform: scale(1); }
+}
+
+.pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Input resets */
+input, textarea, select {
+  font-family: var(--font-body);
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%; height: 6px;
+  background: rgba(255,255,255,0.1);
+  border: none; border-radius: 3px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
