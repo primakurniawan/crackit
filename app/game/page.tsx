@@ -5,7 +5,7 @@ import { UserPlus, Trash2, Sparkles, ArrowRight } from 'lucide-react';
 import { CATEGORIES, TONE_LABELS, CATEGORY_ACCENT } from '@/lib/seed-questions';
 import type { GameCategory, Player, GameConfig } from '@/types';
 
-export default function GameSetupPage() {
+function GameSetupPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -194,5 +194,17 @@ export default function GameSetupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GameSetupPage() {
+  return (
+    <React.Suspense fallback={
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <p style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Loading setup screen...</p>
+      </div>
+    }>
+      <GameSetupPageContent />
+    </React.Suspense>
   );
 }
