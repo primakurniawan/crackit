@@ -106,7 +106,7 @@ export default function QuestionsPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{
+      <div className="tabs-container" style={{
         display: 'flex', gap: 6, padding: 6,
         background: 'var(--bg-elevated)', borderRadius: 22,
         marginBottom: 20, border: '1px solid var(--border)',
@@ -184,7 +184,7 @@ export default function QuestionsPage() {
 
       {/* Custom Tab */}
       {activeTab === 'custom' && (
-        <div className="bento bento-2" style={{ alignItems: 'start' }}>
+        <div className="bento bento-2 custom-grid" style={{ alignItems: 'start' }}>
           {/* Form */}
           <div className="tile" style={{ padding: 24 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Add New Card</h2>
@@ -256,7 +256,7 @@ export default function QuestionsPage() {
 
       {/* Suggest Tab */}
       {activeTab === 'suggest' && (
-        <div className="tile" style={{ padding: 32, maxWidth: 600, margin: '0 auto' }}>
+        <div className="tile suggest-tile" style={{ padding: 32, maxWidth: 600, margin: '0 auto' }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8, color: '#a855f7' }}>
             Suggest a Question
           </h2>
@@ -310,6 +310,13 @@ export default function QuestionsPage() {
           )}
         </div>
       )}
+      <style>{`
+        @media (max-width: 640px) {
+          .tabs-container { flex-direction: column; border-radius: 24px !important; }
+          .custom-grid { display: flex; flex-direction: column; }
+          .suggest-tile { padding: 24px !important; }
+        }
+      `}</style>
     </div>
   );
 }

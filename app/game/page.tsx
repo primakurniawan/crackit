@@ -67,10 +67,10 @@ function GameSetupPageContent() {
         <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 15 }}>Choose your deck, set the vibe, and add players.</p>
       </div>
 
-      <div className="bento bento-3" style={{ alignItems: 'start' }}>
+      <div className="bento bento-3 setup-grid" style={{ alignItems: 'start' }}>
 
         {/* LEFT: Category + Tone */}
-        <div className="col-span-2" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap)' }}>
+        <div className="col-span-2 setup-left" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap)' }}>
 
           {/* Step 1: Category */}
           <div className="tile" style={{ padding: 24 }}>
@@ -131,7 +131,7 @@ function GameSetupPageContent() {
         </div>
 
         {/* RIGHT: Players */}
-        <div className="tile" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="tile setup-right" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{
               background: 'rgba(255,255,255,0.06)', padding: '4px 10px',
@@ -193,6 +193,12 @@ function GameSetupPageContent() {
           </button>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 1023px) {
+           .setup-grid { display: flex; flex-direction: column; }
+           .setup-left, .setup-right { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 }

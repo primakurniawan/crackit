@@ -24,9 +24,19 @@ export default function RootLayout({
       <body>
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
           <Header />
-          <main style={{ flex: 1, maxWidth: 1100, margin: '0 auto', width: '100%', padding: '32px 20px 60px' }}>
+          <main className="main-content" style={{ flex: 1, maxWidth: 1100, margin: '0 auto', width: '100%' }}>
             {children}
           </main>
+          <style>{`
+            .main-content {
+              padding: 20px 16px 80px;
+            }
+            @media (min-width: 640px) {
+              .main-content {
+                padding: 32px 24px 60px;
+              }
+            }
+          `}</style>
           <Footer />
         </div>
       </body>
