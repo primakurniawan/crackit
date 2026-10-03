@@ -17,11 +17,30 @@ export interface Player {
   score: number;
 }
 
+export type BillSplitMode = 'tiered' | 'proportional' | 'loser_pays_all';
+
+export interface BillSplitConfig {
+  enabled: boolean;
+  totalAmount: number;
+  currency: string;
+  splitMode: BillSplitMode;
+}
+
+export interface PlayerBillShare {
+  playerId: string;
+  playerName: string;
+  score: number;
+  rank: number;
+  amountOwed: number;
+  percentage: number;
+}
+
 export interface GameConfig {
   category: GameCategory;
   tone: string;
   players: Player[];
   timerDuration: number; // seconds
+  billSplit?: BillSplitConfig;
 }
 
 export interface GameState {
