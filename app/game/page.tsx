@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { UserPlus, Trash2, Sparkles, ArrowRight } from 'lucide-react';
+import { UserPlus, Trash2, Sparkles, ArrowRight, DollarSign, Receipt, Award } from 'lucide-react';
 import { CATEGORIES, TONE_LABELS, CATEGORY_ACCENT } from '@/lib/seed-questions';
-import type { GameCategory, Player, GameConfig } from '@/types';
+import type { GameCategory, Player, GameConfig, BillSplitMode } from '@/types';
 
 function GameSetupPageContent() {
   const router = useRouter();
@@ -18,6 +18,12 @@ function GameSetupPageContent() {
     { id: '1', name: 'Player 1', score: 0 },
     { id: '2', name: 'Player 2', score: 0 },
   ]);
+
+  // Bill Split state
+  const [enableBillSplit, setEnableBillSplit] = React.useState(false);
+  const [totalBillAmount, setTotalBillAmount] = React.useState(100);
+  const [currency, setCurrency] = React.useState('$');
+  const [splitMode, setSplitMode] = React.useState<BillSplitMode>('tiered');
 
   const categoryObj = CATEGORIES.find((c) => c.id === category);
 
@@ -52,6 +58,12 @@ function GameSetupPageContent() {
       tone,
       players,
       timerDuration: savedSettings.defaultTimerDuration ?? 60,
+      billSplit: enableBillSplit ? {
+        enabled: true,
+        totalAmount: Number(totalBillAmount) || 0,
+        currency,
+        splitMode,
+      } : undefined,
     };
 
     sessionStorage.setItem('crackit_game_config', JSON.stringify(config));
@@ -128,6 +140,147 @@ function GameSetupPageContent() {
               </div>
             </div>
           )}
+
+          {/* Step 3: Bill Split & Betting Stakes */}
+          <div className="tile" style={{ padding: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{
+                  background: 'rgba(255,255,255,0.06)', padding: '4px 10px',
+                  borderRadius: 8, fontSize: 11, fontWeight: 800, letterSpacing: '0.06em', color: 'var(--text-muted)',
+                }}>STEP 3</span>
+                <h2 style={{ fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Receipt size={20} color="#10b981" /> Bill Split & Stakes
+                </h2>
+              </div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: enableBillSplit ? '#10b981' : 'var(--text-muted)' }}>
+                <input
+                  type="checkbox"
+                  checked={enableBillSplit}
+                  onChange={(e) => setEnableBillSplit(e.target.checked)}
+                  style={{ width: 18, height: 18, accentColor: '#10b981', cursor: 'pointer' }}
+                />
+                Enable Stakes
+              </label>
+            </div>
+
+            {enableBillSplit ? (
+              <div className="fade-up" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: 12 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 6 }}>
+                      TOTAL BILL AMOUNT
+                    </label>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <span style={{ position: 'absolute', left: 14, fontSize: 16, fontWeight: 800, color: '#10b981' }}>{currency}</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="any"
+                        value={totalBillAmount}
+                        onChange={(e) => setTotalBillAmount(Math.max(1, Number(e.target.value)))}
+                        style={{ width: '100%', padding: '10px 14px 10px 32px', fontSize: 16, fontWeight: 700 }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 6 }}>
+                      CURRENCY
+                    </label>
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      style={{ width: '100%', padding: '10px 12px', fontSize: 14, fontWeight: 700 }}
+                    >
+                      <option value="$">$ (USD)</option>
+                      <option value="€">€ (EUR)</option>
+                      <option value="£">£ (GBP)</option>
+                      <option value="₹">₹ (INR)</option>
+                      <option value="₩">₩ (KRW)</option>
+                      <option value="¥">¥ (JPY/CNY)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Preset bill buttons */}
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {[25, 50, 100, 150, 200].map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setTotalBillAmount(amt)}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: 10,
+                        border: totalBillAmount === amt ? '1px solid #10b981' : '1px solid var(--border)',
+                        background: totalBillAmount === amt ? 'rgba(16,185,129,0.15)' : 'var(--bg-surface)',
+                        color: totalBillAmount === amt ? '#10b981' : 'var(--text-secondary)',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {currency}{amt}
+                    </button>
+                  ))}
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8 }}>
+                    SPLIT STRATEGY BASED ON RANK
+                  </label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {[
+                      {
+                        mode: 'tiered',
+                        title: 'Rank Tiered (Top pays $0 / lowest)',
+                        desc: '#1 pays $0 (or minimum), lower ranks pay larger share of bill.',
+                      },
+                      {
+                        mode: 'proportional',
+                        title: 'Proportional to Score Deficit',
+                        desc: 'Players with lower points pay larger share based on points behind leader.',
+                      },
+                      {
+                        mode: 'loser_pays_all',
+                        title: 'Loser Pays All (Bottom Rank)',
+                        desc: 'The player(s) in last place pay 100% of the bill.',
+                      },
+                    ].map((item) => {
+                      const isActive = splitMode === item.mode;
+                      return (
+                        <button
+                          key={item.mode}
+                          type="button"
+                          onClick={() => setSplitMode(item.mode as BillSplitMode)}
+                          style={{
+                            padding: '12px 14px',
+                            borderRadius: 14,
+                            textAlign: 'left',
+                            cursor: 'pointer',
+                            border: `1px solid ${isActive ? '#10b981' : 'var(--border)'}`,
+                            background: isActive ? 'rgba(16,185,129,0.12)' : 'var(--bg-surface)',
+                            transition: 'all 0.15s',
+                          }}
+                        >
+                          <div style={{ fontSize: 14, fontWeight: 700, color: isActive ? '#10b981' : 'var(--text-primary)', marginBottom: 2 }}>
+                            {item.title}
+                          </div>
+                          <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                            {item.desc}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
+                Split dinner, drinks, or coffee bills based on final game ranking! Check &apos;Enable Stakes&apos; to set total bill amount and payout strategy.
+              </p>
+            )}
+          </div>
         </div>
 
         {/* RIGHT: Players */}
@@ -136,7 +289,7 @@ function GameSetupPageContent() {
             <span style={{
               background: 'rgba(255,255,255,0.06)', padding: '4px 10px',
               borderRadius: 8, fontSize: 11, fontWeight: 800, letterSpacing: '0.06em', color: 'var(--text-muted)',
-            }}>STEP 3</span>
+            }}>STEP 4</span>
             <h2 style={{ fontSize: 18, fontWeight: 700 }}>Add Players</h2>
           </div>
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Heart, Users, Home, Briefcase, ArrowRight, Zap, Clock } from 'lucide-react';
+import { Heart, Users, Home, Briefcase, ArrowRight, Zap, Clock, Receipt } from 'lucide-react';
 import { CATEGORIES } from '@/lib/seed-questions';
 
 // Stat cards data
@@ -138,25 +138,48 @@ export default function HomePage() {
         })}
       </div>
 
-      {/* ── Timer Feature Callout ─────────────────────────────────────────── */}
-      <div className="tile callout-tile" style={{
-        padding: '28px 32px',
-        display: 'flex', alignItems: 'center', gap: 24,
-        background: 'rgba(6,182,212,0.06)', borderColor: 'rgba(6,182,212,0.2)',
-      }}>
-        <div style={{
-          width: 56, height: 56, borderRadius: 18,
-          background: 'rgba(6,182,212,0.15)', color: '#06b6d4',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
+      {/* ── Feature Callouts ──────────────────────────────────────────────── */}
+      <div className="bento bento-2">
+        <div className="tile callout-tile" style={{
+          padding: '28px 32px',
+          display: 'flex', alignItems: 'center', gap: 20,
+          background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.2)',
         }}>
-          <Clock size={28} />
+          <div style={{
+            width: 52, height: 52, borderRadius: 18,
+            background: 'rgba(16,185,129,0.15)', color: '#10b981',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <Receipt size={26} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4, color: '#10b981' }}>Rank-Based Bill Splitting</h3>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              Bet on dinner, drinks, or coffee! Split total bills based on final player rankings (Tiered, Proportional, or Loser Pays All).
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4, color: '#06b6d4' }}>Built-in Answer Timer</h3>
-          <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            Each card comes with a countdown — no more stalling! Configure from 30 seconds to 5 minutes in Settings. Game state is saved on refresh.
-          </p>
+
+        <div className="tile callout-tile" style={{
+          padding: '28px 32px',
+          display: 'flex', alignItems: 'center', gap: 20,
+          background: 'rgba(6,182,212,0.06)', borderColor: 'rgba(6,182,212,0.2)',
+        }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 18,
+            background: 'rgba(6,182,212,0.15)', color: '#06b6d4',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <Clock size={26} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4, color: '#06b6d4' }}>Built-in Answer Timer</h3>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              Each card comes with a countdown — no more stalling! Configure from 30 seconds to 5 minutes in Settings.
+            </p>
+          </div>
         </div>
       </div>
 
